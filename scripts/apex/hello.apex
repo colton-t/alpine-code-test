@@ -5,6 +5,14 @@
 // You can also execute the entire file by running the command:
 //     SFDX: Execute Anonymous Apex with Editor Contents
 
-string tempvar = 'Enter_your_name_here';
-System.debug('Hello World!');
-System.debug('My name is ' + tempvar);
+Http http = new Http();
+HttpRequest request = new HttpRequest();
+request.setEndpoint('callout:CheapsharkAPI/deals?storeID=1&upperPrice=15');
+request.setMethod('GET');
+HttpResponse response = http.send(request);
+
+if(response.getStatusCode() == 200) {
+    system.debug('raw results: ' + response.getBody());
+    List<Object> results = (List<Object>) JSON.deserializeUntyped(response.getBody());
+    system.debug('deserial results: ' + results);
+}
