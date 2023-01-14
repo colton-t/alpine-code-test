@@ -1,34 +1,47 @@
 <template>
     <lightning-card title="Search Deals On PC Games" icon-name="related_list">
         <lightning-layout multiple-rows="true">
-            <lightning-layout-item padding="around-small" size="12">
+            <lightning-layout-item padding="around-small" size="4">
                 <div class="slds-p-around_medium">
-                    <lightning-input label="Title" type="search"></lightning-input>
+                    <lightning-input label="Title" type="search" class="search-bar"></lightning-input>
+                </div>
+            </lightning-layout-item>
+            <lightning-layout-item padding="around-small" size="8">
+                <div class="slds-p-around_medium">
+                    <h2>Placeholder</h2>
                 </div>
             </lightning-layout-item>
             <lightning-layout-item padding="around-small" size="12">
                 <lightning-layout>
                     <lightning-layout-item padding="around-small" size="4">
                         <div>
-                            <lightning-input label="Title" type="search"></lightning-input>
+                            <lightning-button 
+                                variant="brand" 
+                                label="Search" 
+                                onclick={fetchGameDeals} 
+                                class="slds-m-left_x-small">
+                            </lightning-button>
                         </div>
                     </lightning-layout-item>
                     <lightning-layout-item padding="around-small" size="4">
                         <div>
-                            <h2>Main</h2>
+                            <h2>Placeholder</h2>
                         </div>
                     </lightning-layout-item>
                     <lightning-layout-item padding="around-small" size="4">
                         <div>
-                            <h2>Right Sidebar</h2>
-                            <ul>
-                                <li><a href="#">Archive 1</a>   
-                                </li>
-                            </ul>
+                            <h2>Placeholder</h2>
                         </div>
                     </lightning-layout-item>
                 </lightning-layout>
             </lightning-layout-item>
         </lightning-layout>
+        <div style="height: 500px;">
+            <lightning-datatable
+                    key-field="id"
+                    data={games}
+                    columns={columns}>
+            </lightning-datatable>
+        </div>
     </lightning-card>
 </template>

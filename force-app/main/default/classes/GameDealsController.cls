@@ -1,13 +1,14 @@
 public with sharing class GameDealsController {
     
-    public static List<GameDeals> getGameDeals(String criteria) {
+    @AuraEnabled
+    public static List<Object> getGameDeals(String criteria) {
         
         Http http = new Http();
         HttpRequest request = new HttpRequest();
-        request.setEndpoint('callout:CheapsharkAPI' + criteria);
+        request.setEndpoint('https://www.cheapshark.com/api/1.0/deals?' + criteria);
         request.setMethod('GET');
 
-        List<GameDeals> games = new List<GameDeals>();
+        List<Object> games = new List<Object>();
         String result = null;
         
         try {
@@ -23,7 +24,7 @@ public with sharing class GameDealsController {
         }
 
         if(!String.isBlank(result))
-            games = (List<GameDeals>) System.JSON.deserialize(result, List<GameDeals>.class);
+            games = (List<Object>) JSON.deserializeUntyped(result); //(List<GameDeals>) System.JSON.deserialize(result, List<GameDeals>.class);
             
         return games;
     }
