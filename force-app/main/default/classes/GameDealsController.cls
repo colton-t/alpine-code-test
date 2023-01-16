@@ -1,14 +1,24 @@
 public with sharing class GameDealsController {
     
-    @AuraEnabled
-    public static List<Object> getGameDeals(String criteria) {
+    @AuraEnabled(cacheable=true)
+    public static List<Object> getTitleDeals(String searchTitle) { 
+        return getApiData('callout:CheapsharkAPI/deals?title=' + searchTitle);
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Object> getStores() { 
+        return getApiData('callout:CheapsharkAPI/stores');
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<Object> getApiData(String endpoint) {
         
         Http http = new Http();
         HttpRequest request = new HttpRequest();
-        request.setEndpoint('https://www.cheapshark.com/api/1.0/deals?' + criteria);
+        request.setEndpoint(endpoint);
         request.setMethod('GET');
 
-        List<Object> games = new List<Object>();
+        List<Object> data = new List<Object>();
         String result = null;
         
         try {
@@ -18,40 +28,14 @@ public with sharing class GameDealsController {
                 result = response.getBody();
             else
                 throw new CalloutException(response.getBody());
-
+                
         } catch(Exception e) {
             System.debug(e);
         }
 
         if(!String.isBlank(result))
-            games = (List<Object>) JSON.deserializeUntyped(result); //(List<GameDeals>) System.JSON.deserialize(result, List<GameDeals>.class);
-            
-        return games;
-    }
-    
+            data = (List<Object>) JSON.deserializeUntyped(result);
 
-    // Wrapper class for parsing JSON response data from callout
-    public class GameDeals {
-
-        public String internalName;
-        public String title;
-        public String metacriticLink;
-        public String dealID;
-        public String storeID;
-        public String gameID;
-        public String salePrice;
-        public String normalPrice;
-        public String isOnSale;
-        public String savings;
-        public String metacriticScore;
-        public String steamRatingText;
-        public String steamRatingPercent;
-        public String steamRatingCount;
-        public String steamAppID;
-        public Integer releaseDate;
-        public Integer lastChange;
-        public String dealRating;
-        public String thumb;
-
+        return data;
     }
 }
